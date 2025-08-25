@@ -1,0 +1,26 @@
+# Core framework
+streamlit
+
+# Vector search (local FAISS for prototyping)
+faiss-cpu
+
+# Document parsing
+pymupdf          # PDF parsing (better than PyPDF2)
+PyPDF2           # (keep if you use it elsewhere)
+
+# Embeddings / reranking
+sentence-transformers
+transformers>=4.44
+accelerate
+# Optional GPU-only: bitsandbytes
+# bitsandbytes
+
+# RAG plumbing
+langchain
+langchain-community
+
+# Cassandra / Astra
+cassandra-driver==3.29.2
+
+# Config / environment
+python-dotenv

@@ -1,0 +1,21 @@
+# venv
+.venv/
+env/
+venv/
+
+# python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# editor
+.vscode/
+
+# env / secrets
+.env
+
+# data / big files
+data/
+*.pdf
+*.zip
+models_cache/
