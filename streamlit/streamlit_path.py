@@ -5,22 +5,18 @@ from typing import List, Dict, Any, Tuple
 import streamlit as st
 import numpy as np
 import faiss
-import fitz  # PyMuPDF
+import fitz  
 import torch
 
 from sentence_transformers import SentenceTransformer, CrossEncoder
 from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
 
 
-# ---------------------------
-# STREAMLIT PAGE CONFIG
-# ---------------------------
+
 st.set_page_config(page_title="Chat with PDF (OSS)", layout="wide")
 
 
-# ---------------------------
-# HELPERS
-# ---------------------------
+
 def extract_pdf_text_blocks(file_bytes: bytes) -> List[Dict[str, Any]]:
     """Return a list of {'page': int, 'text': str} from a PDF."""
     doc = fitz.open(stream=file_bytes, filetype="pdf")
@@ -49,9 +45,7 @@ def chunk_blocks(blocks, max_chars=1000, overlap=150):
     return chunks, meta
 
 
-# ---------------------------
-# CACHED RESOURCES (load once)
-# ---------------------------
+
 @st.cache_resource(show_spinner="Loading embedding model (BGE-small)…")
 def get_embedder():
     # Fast + strong default, 384-dim, normalized cosine
@@ -67,11 +61,7 @@ def get_reranker():
 
 @st.cache_resource(show_spinner="Loading LLM…")
 def get_llm(model_choice: str):
-    """
-    Returns a transformers pipeline for text generation.
-    Defaults to microsoft/Phi-3.5-mini-instruct (CPU okay).
-    If you have a GPU and want stronger: Qwen/Qwen2.5-3B-Instruct.
-    """
+
     name = {
         "Phi-3.5-mini-instruct": "microsoft/Phi-3.5-mini-instruct",
         "Qwen2.5-3B-Instruct": "Qwen/Qwen2.5-3B-Instruct",
@@ -102,9 +92,6 @@ def get_llm(model_choice: str):
     return pipe
 
 
-# ---------------------------
-# FAISS INDEX HELPERS
-# ---------------------------
 def embed_texts(embedder: SentenceTransformer, texts: List[str], batch_size=64) -> np.ndarray:
     vecs = embedder.encode(texts, batch_size=batch_size, show_progress_bar=False, normalize_embeddings=True)
     return np.asarray(vecs, dtype="float32")
@@ -135,9 +122,7 @@ def answer_with_context(llm_pipe, question: str, contexts: List[Dict[str, Any]])
     return out.split("Answer:")[-1].strip()
 
 
-# ---------------------------
-# UI
-# ---------------------------
+
 st.title("📄 Chat with PDF — Open-Source")
 
 with st.sidebar:
